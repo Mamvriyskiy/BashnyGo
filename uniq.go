@@ -17,20 +17,20 @@ type lineData struct {
 }
 
 type options struct {
-	countFlags *bool
-	repeatLine *bool
-	noRepeatLine *bool
-	ignoreRegister *bool
+	countFlags 		  *bool
+	repeatLine 	 	  *bool
+	noRepeatLine 	  *bool
+	ignoreRegister 	  *bool
 	ignoreFirstFields *int
 	ignoreFirstSymbol *int
 }
 
 func main() {
 	par := options{
-		countFlags : flag.Bool("c", false, "number of line encounters"), 
-		repeatLine :  flag.Bool("d", false, "number of line encounters"),
-		noRepeatLine : flag.Bool("u", false, "repeatable lines"),
-		ignoreRegister : flag.Bool("i", false, "ignore the register of letters"),
+		countFlags : 		flag.Bool("c", false, "number of line encounters"), 
+		repeatLine :  		flag.Bool("d", false, "number of line encounters"),
+		noRepeatLine : 		flag.Bool("u", false, "repeatable lines"),
+		ignoreRegister :    flag.Bool("i", false, "ignore the register of letters"),
 		ignoreFirstFields : flag.Int("f", 0, "ignoring the first fields"),
 		ignoreFirstSymbol : flag.Int("s", 0, "ignoring the first symbol"),
 	}
@@ -97,7 +97,9 @@ func readStrings(reader *bufio.Reader, opt options) *orderedmap.OrderedMap[strin
 		var str string
 		str, err = reader.ReadString('\n')
 
-		addToMap(mapStr, str, opt)
+		if err == nil {
+			addToMap(mapStr, str, opt)
+		}
 	}
 
 	return mapStr
@@ -108,7 +110,7 @@ func addToMap(mapStr *orderedmap.OrderedMap[string, lineData], str string, opt o
 
 	if val, ok := mapStr.Get(checkStr); !ok{
 		mapStr.Set(checkStr, lineData {
-			count: 1,
+			count: 		  1,
 			originalLine: str,
 		})
 	} else {
