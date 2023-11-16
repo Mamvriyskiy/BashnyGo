@@ -38,7 +38,6 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
-
 	inputReader := bufio.NewReader(os.Stdin)
 	outputWriter := io.Writer(os.Stdout)
 
@@ -123,6 +122,7 @@ func updateStrOptions(updateStr string, opt options) string {
 		updateStr = strings.ToLower(updateStr)
 	}	
 
+	
 	n := *opt.ignoreFirstFields 
 	if n > 0 {
 		words := strings.FieldsFunc(updateStr, unicode.IsSpace)
