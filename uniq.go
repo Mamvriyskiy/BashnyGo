@@ -38,6 +38,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
+
 	inputReader := bufio.NewReader(os.Stdin)
 	outputWriter := io.Writer(os.Stdout)
 
@@ -62,21 +63,28 @@ func main() {
 	}
 
 	mapString := readStrings(inputReader, par)
+
 	outputResult(outputWriter, mapString, par)
 }
 
 
-func outputResult(outputWriter io.Writer, mapString) {
+func outputResult(outputWriter io.Writer, mapString *orderedmap.OrderedMap[string, lineData], par options) {
 	for _, key := range mapString.Keys() {
 		value, _ := mapString.Get(key)
 
 		switch {
-		case *par.countFlags && len(value.originalLine) > 0:
-			fmt.Fprint(outputWriter, value.count, " ", value.originalLine)
-		case *par.repeatLine && value.count > 1:
-			fmt.Fprint(outputWriter, value.originalLine)
-		case *par.noRepeatLine && value.count == 1:
-			fmt.Fprint(outputWriter, value.originalLine)
+		case *par.countFlags:
+			if len(value.originalLine) > 0 {
+				fmt.Fprint(outputWriter, value.count, " ", value.originalLine)
+			}
+		case *par.repeatLine:
+			if value.count > 1 {
+				fmt.Fprint(outputWriter, value.originalLine)
+			}
+		case *par.noRepeatLine:
+			if value.count == 1 {
+				fmt.Fprint(outputWriter, value.originalLine)
+			}
 		default:
 			fmt.Fprint(outputWriter, value.originalLine)
 		}
