@@ -38,7 +38,6 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
-
 	inputReader := bufio.NewReader(os.Stdin)
 	outputWriter := io.Writer(os.Stdout)
 
@@ -63,32 +62,22 @@ func main() {
 	}
 
 	mapString := readStrings(inputReader, par)
+	outputResult(outputWriter, mapString, par)
+}
 
-	if *par.countFlags {
-		for _, key := range mapString.Keys() {
-			value, _:= mapString.Get(key)
-			originalLine := []rune(value.originalLine)
-			if len(originalLine) > 0 {
-				fmt.Fprint(outputWriter, value.count, " ", value.originalLine)
-			}
-		}
-	} else if *par.repeatLine {
-		for _, key := range mapString.Keys() {
-			value, _:= mapString.Get(key)
-			if value.count > 1 {
-				fmt.Fprint(outputWriter, value.originalLine)
-			}
-		}
-	}  else if *par.noRepeatLine {
-		for _, key := range mapString.Keys() {
-			value, _:= mapString.Get(key)
-			if value.count == 1 {
-				fmt.Fprint(outputWriter, value.originalLine)
-			}
-		}
-	} else {
-		for _, key := range mapString.Keys() {
-			value, _:= mapString.Get(key)
+
+func outputResult(outputWriter io.Writer, mapString) {
+	for _, key := range mapString.Keys() {
+		value, _ := mapString.Get(key)
+
+		switch {
+		case *par.countFlags && len(value.originalLine) > 0:
+			fmt.Fprint(outputWriter, value.count, " ", value.originalLine)
+		case *par.repeatLine && value.count > 1:
+			fmt.Fprint(outputWriter, value.originalLine)
+		case *par.noRepeatLine && value.count == 1:
+			fmt.Fprint(outputWriter, value.originalLine)
+		default:
 			fmt.Fprint(outputWriter, value.originalLine)
 		}
 	}
