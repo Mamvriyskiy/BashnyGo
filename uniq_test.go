@@ -5,14 +5,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func intValue(v int) *int{
-	return &v
-}
-
-func boolValue(flag bool) *bool {
-	return &flag
-}
-
 func TestUpdateStrOptions(t *testing.T) {
 	var testCase = []struct {
 		nameTest string
@@ -20,90 +12,102 @@ func TestUpdateStrOptions(t *testing.T) {
 		opt options
 		expected string
 	} {
-		{"TestIgnoreRegisterA", "abcdf", 
+		{
+			"TestIgnoreRegisterA", "abcdf", 
 			options{ 
-				ignoreRegister : boolValue(true),
-				ignoreFirstFields : intValue(0),
-				ignoreFirstSymbol : intValue(0),
-				}, 
-		"abcdf"},
-		{"TestIgnoreRegisterB", "Ab CdF", 
+				ignoreRegister : true,
+				ignoreFirstFields : 0,
+				ignoreFirstSymbol : 0,
+			}, 
+			"abcdf"},
+		{
+			"TestIgnoreRegisterB", "Ab CdF", 
 			options{ 
-				ignoreRegister : boolValue(true),
-				ignoreFirstFields : intValue(0),
-				ignoreFirstSymbol : intValue(0),
-				}, 
-		"ab cdf"},
-		{"TestIgnoreRegisterC", "ABCDF", 
+				ignoreRegister : true,
+				ignoreFirstFields : 0,
+				ignoreFirstSymbol : 0,
+			}, 
+			"ab cdf"},
+		{
+			"TestIgnoreRegisterC", "ABCDF", 
 			options{ 
-				ignoreRegister : boolValue(true),
-				ignoreFirstFields : intValue(0),
-				ignoreFirstSymbol : intValue(0),
-				}, 
-		"abcdf"},
-		{"TestignoreFirstFieldsA", "a b c d f", 
+				ignoreRegister : true,
+				ignoreFirstFields : 0,
+				ignoreFirstSymbol : 0,
+			}, 
+			"abcdf"},
+		{
+			"TestignoreFirstFieldsA", "a b c d f", 
 			options{ 
-				ignoreRegister : boolValue(false),
-				ignoreFirstFields : intValue(1),
-				ignoreFirstSymbol : intValue(0),
-				}, 
-		"b c d f"},
-		{"TestignoreFirstFieldsB", "ab c d f", 
+				ignoreRegister : false,
+				ignoreFirstFields : 1,
+				ignoreFirstSymbol : 0,
+			}, 
+			"b c d f"},
+		{
+			"TestignoreFirstFieldsB", "ab c d f", 
 			options{ 
-				ignoreRegister : boolValue(false),
-				ignoreFirstFields : intValue(2),
-				ignoreFirstSymbol : intValue(0),
-				}, 
-		"d f"},
-		{"TestignoreFirstFieldsC", "ab cd f", 
+				ignoreRegister : false,
+				ignoreFirstFields : 2,
+				ignoreFirstSymbol : 0,
+			}, 
+			"d f"},
+		{
+			"TestignoreFirstFieldsC", "ab cd f", 
 			options{ 
-				ignoreRegister : boolValue(false),
-				ignoreFirstFields : intValue(2),
-				ignoreFirstSymbol : intValue(0),
+				ignoreRegister : false,
+				ignoreFirstFields : 2,
+				ignoreFirstSymbol : 0,
+			}, 
+			"f"},
+		{
+			"TestignoreFirstSymbolA", "abcdf", 
+			options{ 
+				ignoreRegister : false,
+				ignoreFirstFields : 0,
+				ignoreFirstSymbol : 1,
+			}, 
+			"bcdf"},
+		{
+			"TestignoreFirstSymbolB", "ab cdf", 
+			options{ 
+				ignoreRegister : false,
+				ignoreFirstFields : 0,
+				ignoreFirstSymbol : 3,
+			}, 
+			"cdf"},
+		{
+			"TestignoreFirstSymbolC", "ab cdf", 
+			options{ 
+				ignoreRegister : false,
+				ignoreFirstFields : 0,
+				ignoreFirstSymbol : 5,
+			}, 
+			"f"},
+		{
+			"TestA", "ABC df", 
+			options{ 
+				ignoreRegister : true,
+				ignoreFirstFields : 1,
+				ignoreFirstSymbol : 1,
+			}, 
+			"f"},
+		{
+			"TestB", "ABC df FD", 
+			options{ 
+				ignoreRegister : true,
+				ignoreFirstFields : 1,
+				ignoreFirstSymbol : 1,
 				}, 
-		"f"},
-		{"TestignoreFirstSymbolA", "abcdf", 
-		options{ 
-			ignoreRegister : boolValue(false),
-			ignoreFirstFields : intValue(0),
-			ignoreFirstSymbol : intValue(1),
-			}, 
-		"bcdf"},
-		{"TestignoreFirstSymbolB", "ab cdf", 
-		options{ 
-			ignoreRegister : boolValue(false),
-			ignoreFirstFields : intValue(0),
-			ignoreFirstSymbol : intValue(3),
-			}, 
-		"cdf"},
-		{"TestignoreFirstSymbolC", "ab cdf", 
-		options{ 
-			ignoreRegister : boolValue(false),
-			ignoreFirstFields : intValue(0),
-			ignoreFirstSymbol : intValue(5),
-			}, 
-		"f"},
-		{"TestA", "ABC df", 
-		options{ 
-			ignoreRegister : boolValue(true),
-			ignoreFirstFields : intValue(1),
-			ignoreFirstSymbol : intValue(1),
-			}, 
-		"f"},
-		{"TestB", "ABC df FD", 
-		options{ 
-			ignoreRegister : boolValue(true),
-			ignoreFirstFields : intValue(1),
-			ignoreFirstSymbol : intValue(1),
-			}, 
-		"f fd"},
-		{"TestB", "ABC df FD", 
-		options{ 
-			ignoreRegister : boolValue(true),
-			ignoreFirstFields : intValue(2),
-			ignoreFirstSymbol : intValue(0),
-			}, 
-		"fd"},
+			"f fd"},
+		{
+			"TestB", "ABC df FD", 
+			options{ 
+				ignoreRegister : true,
+				ignoreFirstFields : 2,
+				ignoreFirstSymbol : 0,
+				}, 
+			"fd"},
 		}
 
 	for _, tc := range testCase {

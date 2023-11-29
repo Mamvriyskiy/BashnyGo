@@ -17,22 +17,22 @@ type lineData struct {
 }
 
 type options struct {
-	countFlags 		  *bool
-	repeatLine 	 	  *bool
-	noRepeatLine 	  *bool
-	ignoreRegister 	  *bool
-	ignoreFirstFields *int
-	ignoreFirstSymbol *int
+	countFlags 		  bool
+	repeatLine 	 	  bool
+	noRepeatLine 	  bool
+	ignoreRegister 	  bool
+	ignoreFirstFields int
+	ignoreFirstSymbol int
 }
 
 func main() {
 	par := options{
-		countFlags : 		flag.Bool("c", false, "number of line encounters"), 
-		repeatLine :  		flag.Bool("d", false, "number of line encounters"),
-		noRepeatLine : 		flag.Bool("u", false, "repeatable lines"),
-		ignoreRegister :    flag.Bool("i", false, "ignore the register of letters"),
-		ignoreFirstFields : flag.Int("f", 0, "ignoring the first fields"),
-		ignoreFirstSymbol : flag.Int("s", 0, "ignoring the first symbol"),
+		countFlags : *flag.Bool("c", false, "number of line encounters"), 
+		repeatLine : *flag.Bool("d", false, "number of line encounters"),
+		noRepeatLine : *flag.Bool("u", false, "repeatable lines"),
+		ignoreRegister : *flag.Bool("i", false, "ignore the register of letters"),
+		ignoreFirstFields : *flag.Int("f", 0, "ignoring the first fields"),
+		ignoreFirstSymbol : *flag.Int("s", 0, "ignoring the first symbol"),
 	}
 
 	flag.Parse()
@@ -72,15 +72,15 @@ func outputResult(outputWriter io.Writer, mapString *orderedmap.OrderedMap[strin
 		value, _ := mapString.Get(key)
 
 		switch {
-		case *par.countFlags:
+		case par.countFlags:
 			if len(value.originalLine) > 0 {
 				fmt.Fprint(outputWriter, value.count, " ", value.originalLine)
 			}
-		case *par.repeatLine:
+		case par.repeatLine:
 			if value.count > 1 {
 				fmt.Fprint(outputWriter, value.originalLine)
 			}
-		case *par.noRepeatLine:
+		case par.noRepeatLine:
 			if value.count == 1 {
 				fmt.Fprint(outputWriter, value.originalLine)
 			}
@@ -120,12 +120,12 @@ func addToMap(mapStr *orderedmap.OrderedMap[string, lineData], str string, opt o
 }
 
 func updateStrOptions(updateStr string, opt options) string {
-	if *opt.ignoreRegister {
+	if opt.ignoreRegister {
 		updateStr = strings.ToLower(updateStr)
 	}	
 
 	
-	n := *opt.ignoreFirstFields 
+	n := opt.ignoreFirstFields 
 	if n > 0 {
 		words := strings.FieldsFunc(updateStr, unicode.IsSpace)
 		if len(words) > 1 && n < len(words) {
@@ -133,7 +133,7 @@ func updateStrOptions(updateStr string, opt options) string {
 		}
 	}
 
-	n = *opt.ignoreFirstSymbol
+	n = opt.ignoreFirstSymbol
 	if n > 0 && len(updateStr) != 0 {
 		if n < len(updateStr) {
 			updateStr = updateStr[n : ]
