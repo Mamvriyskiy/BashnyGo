@@ -1,2 +1,4 @@
 uniq
 acceptance-tests/user/
+acceptance-tests/test.sh
+.DS_Store
